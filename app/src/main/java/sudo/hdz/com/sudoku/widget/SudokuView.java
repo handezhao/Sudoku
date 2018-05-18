@@ -1,4 +1,4 @@
-package sudo.hdz.com.sudoku;
+package sudo.hdz.com.sudoku.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -10,6 +10,9 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import sudo.hdz.com.sudoku.callback.OnSetNumberListener;
+import sudo.hdz.com.sudoku.R;
 
 /**
  * Description: a Sudoku demo
@@ -293,6 +296,7 @@ public class SudokuView extends View {
      */
     public void setNumber(int x, int y, int number) {
         sudoku[x][y] = number;
+        invalidate();
     }
 
     /**

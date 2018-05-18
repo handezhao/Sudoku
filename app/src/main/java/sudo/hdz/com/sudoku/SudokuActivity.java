@@ -3,6 +3,10 @@ package sudo.hdz.com.sudoku;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import sudo.hdz.com.sudoku.callback.OnSetNumberListener;
+import sudo.hdz.com.sudoku.callback.PickNumberCallback;
+import sudo.hdz.com.sudoku.widget.SudokuView;
+
 public class SudokuActivity extends AppCompatActivity implements OnSetNumberListener {
 
     private SudokuView sudokuView;

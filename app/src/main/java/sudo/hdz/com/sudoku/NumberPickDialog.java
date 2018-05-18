@@ -4,24 +4,19 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+
+import sudo.hdz.com.sudoku.callback.OnNumberPickListener;
+import sudo.hdz.com.sudoku.callback.PickNumberCallback;
+import sudo.hdz.com.sudoku.widget.NumberPicker;
 
 /**
  * Description:
  * Created by hdz on 17/05/2018.
  */
 
-public class NumberPickDialog extends Dialog implements View.OnClickListener {
+public class NumberPickDialog extends Dialog implements OnNumberPickListener {
 
     private PickNumberCallback callback;
-    private EditText editText;
-    private Button buttonSure;
-    private Button buttonCancel;
-    private int pick;
 
     public NumberPickDialog(@NonNull Context context) {
         super(context, R.style.PickNumberDialogStyle);
@@ -31,27 +26,8 @@ public class NumberPickDialog extends Dialog implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_number_pick);
-        editText = findViewById(R.id.et_number);
-        buttonCancel = findViewById(R.id.bt_cancel);
-        buttonSure = findViewById(R.id.bt_sure);
-
-        buttonSure.setOnClickListener(this);
-        buttonCancel.setOnClickListener(this);
-
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                pick = Integer.valueOf(s.toString());
-            }
-        });
+        NumberPicker numberPicker = findViewById(R.id.picker);
+        numberPicker.setOnNumberPickListener(this);
     }
 
     public void setNumberCallback(PickNumberCallback callback) {
@@ -59,29 +35,10 @@ public class NumberPickDialog extends Dialog implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
-
-        switch (v.getId()) {
-            case R.id.bt_cancel:
-                if (callback != null) {
-                    callback.onCancel();
-                }
-                dismiss();
-                break;
-            case R.id.bt_sure:
-                if (callback != null) {
-                    if (pickIsLegal()) {
-                        callback.onNumberPicked(pick);
-                    } else {
-                        callback.onCancel();
-                    }
-                }
-                dismiss();
-                break;
+    public void onNumberPick(int number) {
+        if (callback != null) {
+            callback.onNumberPicked(number);
         }
-    }
-
-    private boolean pickIsLegal() {
-        return pick > 0 && pick < 10;
+        dismiss();
     }
 }

@@ -1,4 +1,4 @@
-package sudo.hdz.com.sudoku;
+package sudo.hdz.com.sudoku.callback;
 
 /**
  * Description:

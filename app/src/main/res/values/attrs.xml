@@ -7,5 +7,10 @@
         <attr name="outline_width" format="dimension"/>
         <attr name="inline_width" format="dimension"/>
     </declare-styleable>
+
+    <declare-styleable name="NumberPicker">
+        <attr name="line_color" format="color"/>
+        <attr name="line_width" format="dimension"/>
+    </declare-styleable>
     
 </resources>
