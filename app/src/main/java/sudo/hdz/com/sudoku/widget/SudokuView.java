@@ -11,8 +11,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import sudo.hdz.com.sudoku.callback.OnSetNumberListener;
 import sudo.hdz.com.sudoku.R;
+import sudo.hdz.com.sudoku.callback.OnSetNumberListener;
 
 /**
  * Description: a Sudoku demo
@@ -76,7 +76,15 @@ public class SudokuView extends View {
 
     private OnSetNumberListener onSetNumberListener;
 
+    /**
+     * 当前展示的数独
+     */
     private int[][] sudoku = new int[9][9];
+
+    /**
+     * 原题对应的数独
+     */
+    private int[][] originSudoku = new int[9][9];
 
 
     public SudokuView(Context context) {
@@ -231,16 +239,20 @@ public class SudokuView extends View {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 performClick();
-                selected = true;
                 selectedPosition[0] = (int) (event.getX() / sideLength);
                 selectedPosition[1] = (int) (event.getY() / sideLength);
-                Log.d(TAG, "onTouchEvent x = " + selectedPosition[0] + ", y = " +
-                        selectedPosition[1]);
 
-                if (onSetNumberListener != null) {
-                    onSetNumberListener.onSetNumber(selectedPosition[0], selectedPosition[1]);
+                // orign Sudoku position not available
+                if (!isOriginPosition(selectedPosition[0], selectedPosition[1])) {
+                    selected = true;
+                    Log.d(TAG, "onTouchEvent x = " + selectedPosition[0] + ", y = " +
+                            selectedPosition[1]);
+
+                    if (onSetNumberListener != null) {
+                        onSetNumberListener.onSetNumber(selectedPosition[0], selectedPosition[1]);
+                    }
+                    invalidate();
                 }
-                invalidate();
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
@@ -266,7 +278,9 @@ public class SudokuView extends View {
         for (int i = 0; i < sudoku.length; i++) {
             for (int j = 0; j < sudoku[i].length; j++) {
                 if (sudoku[i][j] > 0) {
-                    drawSetColor(canvas, i, j);
+                    if (originSudoku[i][j] != 0) {
+                        drawSetColor(canvas, i, j); // only origin Sudoku high light
+                    }
                     drawNumber(canvas, sudoku[i][j], i * sideLength, j * sideLength);
                 }
             }
@@ -290,6 +304,7 @@ public class SudokuView extends View {
 
     /**
      * 填入具体位置的一个数
+     *
      * @param x
      * @param y
      * @param number
@@ -301,10 +316,20 @@ public class SudokuView extends View {
 
     /**
      * 初始化数独
+     *
      * @param array
      */
     public void initSudoku(int[][] array) {
-        this.sudoku = array;
+        this.originSudoku = array;
+        for (int i = 0; i < originSudoku.length; i++) {
+            for (int j = 0; j < originSudoku[i].length; j++) {
+                sudoku[i][j] = originSudoku[i][j];
+            }
+        }
         invalidate();
+    }
+
+    private boolean isOriginPosition(int x, int y) {
+        return originSudoku[x][y] != 0;
     }
 }
