@@ -13,6 +13,8 @@ import android.view.View;
 
 import sudo.hdz.com.sudoku.R;
 import sudo.hdz.com.sudoku.callback.OnSetNumberListener;
+import sudo.hdz.com.sudoku.utils.Constant;
+import sudo.hdz.com.sudoku.utils.SFHelper;
 
 /**
  * Description: a Sudoku demo
@@ -311,21 +313,38 @@ public class SudokuView extends View {
      */
     public void setNumber(int x, int y, int number) {
         sudoku[x][y] = number;
+        SFHelper.getInstance().putSudoku(Constant.LAST_GAME_HISTORY, sudoku);
         invalidate();
     }
 
     /**
-     * 初始化数独
-     *
-     * @param array
+     * new game
+     * @param origin
      */
-    public void initSudoku(int[][] array) {
-        this.originSudoku = array;
+    public void initSudoku(int[][] origin) {
+        this.originSudoku = origin;
         for (int i = 0; i < originSudoku.length; i++) {
             for (int j = 0; j < originSudoku[i].length; j++) {
                 sudoku[i][j] = originSudoku[i][j];
             }
         }
+        SFHelper.getInstance().putSudoku(Constant.LAST_GAME_ORIGN, origin);
+
+        // start a new game meaning to clear history
+        SFHelper.getInstance().putSudoku(Constant.LAST_GAME_HISTORY, null);
+        invalidate();
+    }
+
+    /**
+     * continue game
+     * @param origin
+     * @param saved
+     */
+    public void initSudoku(int[][] origin, int[][] saved) {
+        this.originSudoku = origin;
+        this.sudoku = saved;
+        SFHelper.getInstance().putSudoku(Constant.LAST_GAME_HISTORY, saved);
+        SFHelper.getInstance().putSudoku(Constant.LAST_GAME_ORIGN, origin);
         invalidate();
     }
 

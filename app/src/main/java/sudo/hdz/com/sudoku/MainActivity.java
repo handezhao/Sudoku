@@ -13,6 +13,9 @@ import butterknife.Unbinder;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    public static final String INTENT_GAME_MODEL = "game_model";
+
+
     Unbinder unbinder;
     @BindView(R.id.tv_about)
     TextView tvAbout;
@@ -48,10 +51,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_new_game:
-                startActivity(new Intent(this, SudokuActivity.class));
+                Intent intent = new Intent();
+                intent.setClass(this, SudokuActivity.class);
+                intent.putExtra(INTENT_GAME_MODEL, 1);
+                startActivity(intent);
                 break;
             case R.id.tv_continue:
-                toast("continue!");
+                Intent continueIntent = new Intent();
+                continueIntent.putExtra(INTENT_GAME_MODEL, 2);
+                continueIntent.setClass(this, SudokuActivity.class);
+                startActivity(continueIntent);
                 break;
             case R.id.tv_about:
                 toast("A demo!");

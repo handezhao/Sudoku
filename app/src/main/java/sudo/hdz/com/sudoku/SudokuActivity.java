@@ -1,10 +1,13 @@
 package sudo.hdz.com.sudoku;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import sudo.hdz.com.sudoku.callback.OnSetNumberListener;
 import sudo.hdz.com.sudoku.callback.PickNumberCallback;
+import sudo.hdz.com.sudoku.utils.Constant;
+import sudo.hdz.com.sudoku.utils.SFHelper;
 import sudo.hdz.com.sudoku.widget.SudokuView;
 
 public class SudokuActivity extends AppCompatActivity implements OnSetNumberListener {
@@ -16,6 +19,8 @@ public class SudokuActivity extends AppCompatActivity implements OnSetNumberList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sudoku);
+        Intent intent = getIntent();
+        int model = intent.getIntExtra(MainActivity.INTENT_GAME_MODEL, 1);
         sudokuView = findViewById(R.id.sudoku_view);
         sudokuView.setOnSetNumberListener(this);
         sudoku = new int[][]{
@@ -29,13 +34,23 @@ public class SudokuActivity extends AppCompatActivity implements OnSetNumberList
                 {0, 2, 0, 5, 0, 0, 0, 0, 1},
                 {0, 0, 1, 0, 0, 0, 0, 0, 7}
         };
-        sudokuView.initSudoku(sudoku);
+
+        if (model == 1) { // new game
+            sudokuView.initSudoku(sudoku);
+        } else {
+            int[][] history = SFHelper.getInstance().getSudoku(Constant.LAST_GAME_HISTORY);
+            if (history == null) {
+                // TODO: 18/05/2018 start a new game
+                sudokuView.initSudoku(sudoku);
+            } else {
+                int[][] origin = SFHelper.getInstance().getSudoku(Constant.LAST_GAME_ORIGN);
+                sudokuView.initSudoku(origin, history);
+            }
+        }
     }
 
     @Override
     public void onSetNumber(final int x, final int y) {
-
-
         NumberPickDialog dialog = new NumberPickDialog(this);
         dialog.setNumberCallback(new PickNumberCallback() {
             @Override
@@ -51,6 +66,4 @@ public class SudokuActivity extends AppCompatActivity implements OnSetNumberList
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
     }
-
-
 }
