@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#fff"
+    android:gravity="center_horizontal"
+    android:paddingTop="50dp"
+    >
+
+    <TextView
+        android:id="@+id/tv_new_game"
+        style="@style/MainTextStyle"
+        android:text="@string/new_game"
+        />
+
+    <TextView
+        android:id="@+id/tv_continue"
+        style="@style/MainTextStyle"
+        android:text="@string/continue_game"
+        />
+
+    <TextView
+        android:id="@+id/tv_about"
+        style="@style/MainTextStyle"
+        android:text="@string/about_us"
+        />
+
+    <TextView
+        android:id="@+id/tv_exit"
+        style="@style/MainTextStyle"
+        android:text="@string/exit"
+        />
+
+</LinearLayout>

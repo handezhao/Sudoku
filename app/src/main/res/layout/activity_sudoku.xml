@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:padding="0dp">
+
+    <sudo.hdz.com.sudoku.SudokuView
+        android:id="@+id/sudoku_view"
+        android:layout_width="340dp"
+        android:layout_height="600dp"
+        android:background="#f0f0f0"
+        android:focusable="true"
+        android:clickable="true"
+        app:inline_color="#4FB783"
+        app:inline_width="1dp"
+        app:outline_color="#0F4471"
+        app:outline_width="2dp" />
+
+</RelativeLayout>

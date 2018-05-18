@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <declare-styleable name="SudokuView">
+        <attr name="outline_color" format="color"/>
+        <attr name="inline_color" format="color"/>
+        <attr name="outline_width" format="dimension"/>
+        <attr name="inline_width" format="dimension"/>
+    </declare-styleable>
+    
+</resources>
