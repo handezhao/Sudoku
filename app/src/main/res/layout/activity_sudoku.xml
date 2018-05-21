@@ -8,14 +8,16 @@
 
     <sudo.hdz.com.sudoku.widget.SudokuView
         android:id="@+id/sudoku_view"
-        android:layout_width="340dp"
+        android:layout_width="350dp"
         android:layout_height="600dp"
-        android:background="#f0f0f0"
-        android:focusable="true"
         android:clickable="true"
-        app:inline_color="#4FB783"
-        app:inline_width="1dp"
-        app:outline_color="#0F4471"
+        android:focusable="true"
+        app:fill_color="@color/fill_color"
+        app:inline_color="@color/inline_color"
+        app:inline_width="1px"
+        app:number_color="@color/black"
+        app:number_size="@dimen/number_size"
+        app:outline_color="@color/outline_color"
         app:outline_width="2dp" />
 
 </RelativeLayout>

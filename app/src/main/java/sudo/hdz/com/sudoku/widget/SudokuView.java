@@ -3,7 +3,6 @@ package sudo.hdz.com.sudoku.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -51,6 +50,11 @@ public class SudokuView extends View {
      * 小方格的边长
      */
     private float sideLength;
+
+    private int fillColor = 0xD7FBE8;
+
+    private float numberSize = 60.0f;
+    private int numberColor = 0x000;
 
 
     private Paint outlinePaint;
@@ -111,6 +115,9 @@ public class SudokuView extends View {
         outlineColor = typedArray.getColor(R.styleable.SudokuView_outline_color, 0xfff);
         inlineWidth = typedArray.getDimension(R.styleable.SudokuView_inline_width, 20.0f);
         inlineColor = typedArray.getColor(R.styleable.SudokuView_inline_color, 0xfff);
+        fillColor = typedArray.getColor(R.styleable.SudokuView_fill_color, 0xD7FBE8);
+        numberSize = typedArray.getDimension(R.styleable.SudokuView_number_size, 50);
+        numberColor = typedArray.getColor(R.styleable.SudokuView_number_color, 0x000);
         typedArray.recycle();
     }
 
@@ -129,14 +136,14 @@ public class SudokuView extends View {
 
         textPaint = new Paint();
         textPaint.setAntiAlias(true);
-        textPaint.setColor(Color.parseColor("#454545"));
-        textPaint.setTextSize(40);
+        textPaint.setColor(numberColor);
+        textPaint.setTextSize(numberSize);
         textMetrics = textPaint.getFontMetrics();
 
         fillPaint = new Paint();
         fillPaint.setStyle(Paint.Style.FILL);
         fillPaint.setAntiAlias(true);
-        fillPaint.setColor(Color.parseColor("#C4EADA"));
+        fillPaint.setColor(fillColor);
     }
 
 

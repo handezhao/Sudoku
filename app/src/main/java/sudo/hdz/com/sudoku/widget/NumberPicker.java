@@ -3,7 +3,6 @@ package sudo.hdz.com.sudoku.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -55,6 +54,10 @@ public class NumberPicker extends View {
     private float pressRight;
     private float pressBottom;
 
+    private float numberSize = 50;
+    private int pressColor = 0xD7FBE8;
+    private int numberColor = 0x000;
+
     public NumberPicker(Context context) {
         this(context, null, 0);
     }
@@ -69,6 +72,9 @@ public class NumberPicker extends View {
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.NumberPicker);
         lineColor = array.getColor(R.styleable.NumberPicker_line_color, 0x000);
         lineWidth = array.getDimension(R.styleable.NumberPicker_line_width, 10.0f);
+        numberSize = array.getDimension(R.styleable.SudokuView_number_size, 50.0f);
+        numberColor = array.getColor(R.styleable.SudokuView_number_color, 0x000);
+        pressColor = array.getColor(R.styleable.SudokuView_fill_color, 0xD7FBE8);
         array.recycle();
         init();
     }
@@ -81,12 +87,12 @@ public class NumberPicker extends View {
 
         numberPaint = new Paint();
         numberPaint.setAntiAlias(true);
-        numberPaint.setColor(Color.parseColor("#454545"));
-        numberPaint.setTextSize(50);
+        numberPaint.setColor(numberColor);
+        numberPaint.setTextSize(numberSize);
         textMetrics = numberPaint.getFontMetrics();
 
         pressPaint = new Paint();
-        pressPaint.setColor(Color.parseColor("#97CBA9"));
+        pressPaint.setColor(pressColor);
     }
 
 

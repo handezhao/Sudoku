@@ -3,13 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="150dp"
     android:layout_height="150dp"
-    android:gravity="center"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:gravity="center">
 
     <sudo.hdz.com.sudoku.widget.NumberPicker
         android:id="@+id/picker"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:line_color="#0F4471"
-        app:line_width="2dp" />
+        app:fill_color="@color/fill_color"
+        app:line_color="@color/outline_color"
+        app:line_width="2dp"
+        app:number_color="@color/black"
+        app:number_size="@dimen/number_size" />
 </RelativeLayout>

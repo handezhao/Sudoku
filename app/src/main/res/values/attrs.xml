@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
+    <attr name="number_color" format="color" />
+    <attr name="number_size" format="dimension" />
+    <attr name="fill_color" format="color" />
+
     <declare-styleable name="SudokuView">
-        <attr name="outline_color" format="color"/>
-        <attr name="inline_color" format="color"/>
-        <attr name="outline_width" format="dimension"/>
-        <attr name="inline_width" format="dimension"/>
+        <attr name="outline_color" format="color" />
+        <attr name="inline_color" format="color" />
+        <attr name="outline_width" format="dimension" />
+        <attr name="inline_width" format="dimension" />
+        <attr name="number_color" />
+        <attr name="number_size" />
+        <attr name="fill_color" />
+
     </declare-styleable>
 
     <declare-styleable name="NumberPicker">
-        <attr name="line_color" format="color"/>
-        <attr name="line_width" format="dimension"/>
+        <attr name="line_color" format="color" />
+        <attr name="line_width" format="dimension" />
+        <attr name="number_color" />
+        <attr name="number_size" />
+        <attr name="fill_color" />
     </declare-styleable>
-    
+
 </resources>
