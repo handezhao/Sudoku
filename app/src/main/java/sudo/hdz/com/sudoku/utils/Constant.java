@@ -9,6 +9,6 @@ public class Constant {
 
     public static final String LAST_GAME_HISTORY = "last_game_history";
 
-    public static final String LAST_GAME_ORIGN = "last_game_origin";
+    public static final String LAST_GAME_ORIGIN = "last_game_origin";
 
 }

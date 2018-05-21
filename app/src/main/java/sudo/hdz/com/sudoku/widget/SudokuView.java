@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -87,6 +86,8 @@ public class SudokuView extends View {
      * 原题对应的数独
      */
     private int[][] originSudoku = new int[9][9];
+
+    private long lastClickTime;
 
 
     public SudokuView(Context context) {
@@ -240,6 +241,7 @@ public class SudokuView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                lastClickTime = System.currentTimeMillis();
                 performClick();
                 selectedPosition[0] = (int) (event.getX() / sideLength);
                 selectedPosition[1] = (int) (event.getY() / sideLength);
@@ -247,17 +249,25 @@ public class SudokuView extends View {
                 // orign Sudoku position not available
                 if (!isOriginPosition(selectedPosition[0], selectedPosition[1])) {
                     selected = true;
-                    Log.d(TAG, "onTouchEvent x = " + selectedPosition[0] + ", y = " +
-                            selectedPosition[1]);
-
-                    if (onSetNumberListener != null) {
-                        onSetNumberListener.onSetNumber(selectedPosition[0], selectedPosition[1]);
-                    }
                     invalidate();
                 }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
+                if (!isOriginPosition(selectedPosition[0], selectedPosition[1])) {
+                    if (sudoku[selectedPosition[0]][selectedPosition[1]] != 0 && System
+                            .currentTimeMillis() - lastClickTime > 500) {
+                        // long clicked
+                        if (onSetNumberListener != null) {
+                            onSetNumberListener.onReset(selectedPosition[0], selectedPosition[1]);
+                        }
+                    } else {
+                        if (onSetNumberListener != null) {
+                            onSetNumberListener.onSetNumber(selectedPosition[0],
+                                    selectedPosition[1]);
+                        }
+                    }
+                }
                 selected = false;
                 invalidate();
                 break;
@@ -319,6 +329,7 @@ public class SudokuView extends View {
 
     /**
      * new game
+     *
      * @param origin
      */
     public void initSudoku(int[][] origin) {
@@ -328,7 +339,7 @@ public class SudokuView extends View {
                 sudoku[i][j] = originSudoku[i][j];
             }
         }
-        SFHelper.getInstance().putSudoku(Constant.LAST_GAME_ORIGN, origin);
+        SFHelper.getInstance().putSudoku(Constant.LAST_GAME_ORIGIN, origin);
 
         // start a new game meaning to clear history
         SFHelper.getInstance().putSudoku(Constant.LAST_GAME_HISTORY, null);
@@ -337,6 +348,7 @@ public class SudokuView extends View {
 
     /**
      * continue game
+     *
      * @param origin
      * @param saved
      */
@@ -344,7 +356,7 @@ public class SudokuView extends View {
         this.originSudoku = origin;
         this.sudoku = saved;
         SFHelper.getInstance().putSudoku(Constant.LAST_GAME_HISTORY, saved);
-        SFHelper.getInstance().putSudoku(Constant.LAST_GAME_ORIGN, origin);
+        SFHelper.getInstance().putSudoku(Constant.LAST_GAME_ORIGIN, origin);
         invalidate();
     }
 

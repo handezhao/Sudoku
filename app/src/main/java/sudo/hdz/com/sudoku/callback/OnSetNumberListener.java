@@ -7,4 +7,5 @@ package sudo.hdz.com.sudoku.callback;
 
 public interface OnSetNumberListener {
     void onSetNumber(int x, int y);
+    void onReset(int x, int y);
 }

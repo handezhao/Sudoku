@@ -43,7 +43,7 @@ public class SudokuActivity extends AppCompatActivity implements OnSetNumberList
                 // TODO: 18/05/2018 start a new game
                 sudokuView.initSudoku(sudoku);
             } else {
-                int[][] origin = SFHelper.getInstance().getSudoku(Constant.LAST_GAME_ORIGN);
+                int[][] origin = SFHelper.getInstance().getSudoku(Constant.LAST_GAME_ORIGIN);
                 sudokuView.initSudoku(origin, history);
             }
         }
@@ -65,5 +65,10 @@ public class SudokuActivity extends AppCompatActivity implements OnSetNumberList
         });
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
+    }
+
+    @Override
+    public void onReset(int x, int y) {
+        sudokuView.setNumber(x, y, 0);
     }
 }
