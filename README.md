@@ -3,8 +3,19 @@ This is project to show some simple Sudoku game.
 
 #### show
 
-![github](https://github.com/handezhao/Sudoku/raw/master/picture/SudokuView.png)
+- new UI style on branch new-appearance
+
+  ![github](https://github.com/handezhao/Sudoku/raw/master/picture/sdnew.png)
+
+- old UI style
+
+  - Sudoku 
+
+    ![github](https://github.com/handezhao/Sudoku/raw/master/picture/NumberPicture.png)
+
+  - NumberPicker
+
+    ![github](https://github.com/handezhao/Sudoku/raw/master/picture/SudokuView.png)
 
 
 
-![github](https://github.com/handezhao/Sudoku/raw/master/picture/NumberPicture.png)
