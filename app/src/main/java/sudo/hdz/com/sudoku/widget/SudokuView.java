@@ -288,12 +288,12 @@ public class SudokuView extends View {
                     Log.d(TAG, "touch position out of bound");
                     return false;
                 }
+                selectedPosition[0] = (int) (exactX / sideLength);
+                selectedPosition[1] = (int) (exactY / sideLength);
                 if (selectedPosition[0] > 8 || selectedPosition[1] > 8) {
                     Log.d(TAG, "touch position out of bound");
                     return false;
                 }
-                selectedPosition[0] = (int) (exactX / sideLength);
-                selectedPosition[1] = (int) (exactY / sideLength);
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
@@ -326,7 +326,8 @@ public class SudokuView extends View {
             for (int j = 0; j < sudoku[i].length; j++) {
                 if (sudoku[i][j] > 0) {
                     if (originSudoku[i][j] != 0) {
-//                        drawSetColor(canvas, i, j); // only origin Sudoku high light
+                        //                        drawSetColor(canvas, i, j); // only origin
+                        // Sudoku high light
                         textPaint.setColor(numberColor);
                     } else {
                         textPaint.setColor(Color.BLACK);
@@ -341,6 +342,7 @@ public class SudokuView extends View {
         if (selectedPosition[0] < 0 || selectedPosition[1] < 0) return;
         if (originSudoku[selectedPosition[0]][selectedPosition[1]] != 0) return;
         drawSelectedReact(canvas, selectedPosition[0], selectedPosition[1]);
+        textPaint.setColor(Color.BLACK);
         drawNumber(canvas, sudoku[selectedPosition[0]][selectedPosition[1]], getXPostion
                 (selectedPosition[0]), getYPosition(selectedPosition[1]));
         lastSelectedPosition[0] = selectedPosition[0];
@@ -439,7 +441,12 @@ public class SudokuView extends View {
     }
 
     private boolean isOriginPosition(int x, int y) {
-        return originSudoku[x][y] != 0;
+        if (x < 0 || y < 0 || x > 8 || y > 8) {
+            Log.d(TAG, "touch outside");
+            return false;
+        } else {
+            return originSudoku[x][y] != 0;
+        }
     }
 
     public void setOnSudokuSelectedListener(OnSudokuSelectedListener onSudokuSelectedListener) {
