@@ -3,8 +3,7 @@ This is project to show some simple Sudoku game.
 
 #### show
 
-![github](https://github.com/handezhao/Sudoku/raw/master/picture/SudokuView.png)
+- new UI style
 
+![github](https://github.com/handezhao/Sudoku/raw/master/picture/sdnew.png)
 
-
-![github](https://github.com/handezhao/Sudoku/raw/master/picture/NumberPicture.png)
