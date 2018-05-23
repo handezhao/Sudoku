@@ -11,11 +11,12 @@ This is project to show some simple Sudoku game.
 
   - Sudoku 
 
-    ![github](https://github.com/handezhao/Sudoku/raw/master/picture/NumberPicture.png)
+    ![github](https://github.com/handezhao/Sudoku/raw/master/picture/SudokuView.png)
 
   - NumberPicker
 
-    ![github](https://github.com/handezhao/Sudoku/raw/master/picture/SudokuView.png)
+    ![github](https://github.com/handezhao/Sudoku/raw/master/picture/NumberPicture.png)
+
 
 
 
