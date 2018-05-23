@@ -5,5 +5,5 @@ This is project to show some simple Sudoku game.
 
 - new UI style
 
-![github](https://github.com/handezhao/Sudoku/raw/master/picture/sdnew.png)
+![github](https://github.com/handezhao/Sudoku/raw/new-appearance/picture/sdnew.png)
 
