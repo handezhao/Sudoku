@@ -24,4 +24,10 @@
         <attr name="fill_color" />
     </declare-styleable>
 
+    <declare-styleable name="ToolView">
+        <attr name="number_color" />
+        <attr name="number_size" />
+        <attr name="fill_color" />
+    </declare-styleable>
+
 </resources>

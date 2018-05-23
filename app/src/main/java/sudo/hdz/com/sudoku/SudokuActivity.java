@@ -3,17 +3,23 @@ package sudo.hdz.com.sudoku;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
-import sudo.hdz.com.sudoku.callback.OnSetNumberListener;
-import sudo.hdz.com.sudoku.callback.PickNumberCallback;
+import sudo.hdz.com.sudoku.callback.OnNumberPickListener;
+import sudo.hdz.com.sudoku.callback.OnSudokuSelectedListener;
 import sudo.hdz.com.sudoku.utils.Constant;
 import sudo.hdz.com.sudoku.utils.SFHelper;
 import sudo.hdz.com.sudoku.widget.SudokuView;
+import sudo.hdz.com.sudoku.widget.ToolView;
 
-public class SudokuActivity extends AppCompatActivity implements OnSetNumberListener {
+public class SudokuActivity extends AppCompatActivity implements OnSudokuSelectedListener,
+        OnNumberPickListener {
+    public static final String TAG = "SudokuActivity";
 
     private SudokuView sudokuView;
+    private ToolView toolView;
     private int[][] sudoku;
+    private int[] selectedPosition = new int[2];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +28,10 @@ public class SudokuActivity extends AppCompatActivity implements OnSetNumberList
         Intent intent = getIntent();
         int model = intent.getIntExtra(MainActivity.INTENT_GAME_MODEL, 1);
         sudokuView = findViewById(R.id.sudoku_view);
-        sudokuView.setOnSetNumberListener(this);
+        sudokuView.setOnSudokuSelectedListener(this);
+        toolView = findViewById(R.id.tool_view);
+        toolView.setOnNumberPickListener(this);
+
         sudoku = new int[][]{
                 {2, 3, 0, 0, 0, 0, 1, 0, 0},
                 {1, 8, 0, 0, 2, 4, 0, 9, 0},
@@ -50,25 +59,13 @@ public class SudokuActivity extends AppCompatActivity implements OnSetNumberList
     }
 
     @Override
-    public void onSetNumber(final int x, final int y) {
-        NumberPickDialog dialog = new NumberPickDialog(this);
-        dialog.setNumberCallback(new PickNumberCallback() {
-            @Override
-            public void onNumberPicked(int number) {
-                sudokuView.setNumber(x, y, number);
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.show();
+    public void onSelected(int[] position) {
+        selectedPosition = position;
     }
 
     @Override
-    public void onReset(int x, int y) {
-        sudokuView.setNumber(x, y, 0);
+    public void onNumberPick(int number) {
+        Log.d(TAG, "pick number is " + number);
+        sudokuView.setNumber(selectedPosition[0], selectedPosition[1], number);
     }
 }

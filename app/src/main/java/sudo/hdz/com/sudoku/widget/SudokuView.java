@@ -3,14 +3,17 @@ package sudo.hdz.com.sudoku.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import sudo.hdz.com.sudoku.R;
-import sudo.hdz.com.sudoku.callback.OnSetNumberListener;
+import sudo.hdz.com.sudoku.callback.OnSudokuSelectedListener;
 import sudo.hdz.com.sudoku.utils.Constant;
 import sudo.hdz.com.sudoku.utils.SFHelper;
 
@@ -61,6 +64,7 @@ public class SudokuView extends View {
     private Paint inlinePaint;
     private Paint textPaint;
     private Paint fillPaint;
+    private Paint selectedPaint;
 
     /**
      * 防止四条边框只显示一半，需要draw line的时候偏移的量
@@ -75,11 +79,11 @@ public class SudokuView extends View {
     /**
      * 当前选择的格子
      */
-    private int[] selectedPosition = new int[2];
+    private int[] selectedPosition = new int[]{-1, -1};
 
-    private boolean selected = false;
+    private int[] lastSelectedPosition = new int[]{-1, -1};
 
-    private OnSetNumberListener onSetNumberListener;
+    private OnSudokuSelectedListener onSudokuSelectedListener;
 
     /**
      * 当前展示的数独
@@ -91,7 +95,13 @@ public class SudokuView extends View {
      */
     private int[][] originSudoku = new int[9][9];
 
-    private long lastClickTime;
+    private float roundR = 16.0f;
+
+    private static final float overSpace = 50.0f;
+
+    private float outSignle;
+    int resultLength;
+    RectF selectedRect = new RectF(0, 0, 0, 0);
 
 
     public SudokuView(Context context) {
@@ -144,6 +154,9 @@ public class SudokuView extends View {
         fillPaint.setStyle(Paint.Style.FILL);
         fillPaint.setAntiAlias(true);
         fillPaint.setColor(fillColor);
+
+        selectedPaint = new Paint();
+        selectedPaint.setAntiAlias(true);
     }
 
 
@@ -152,8 +165,9 @@ public class SudokuView extends View {
         // do not set padding!!!
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
-        int resultLength = Math.min(width, height);
-        sideLength = resultLength / 9.0f;
+        resultLength = Math.min(width, height);
+        outSignle = (resultLength - 2 * overSpace - 2 * drawOffset) / 3.0f;
+        sideLength = (outSignle - 2 * drawOffset) / 3.0f;
         setMeasuredDimension(resultLength, resultLength);
     }
 
@@ -170,14 +184,10 @@ public class SudokuView extends View {
      * @param canvas
      */
     private void drawHorizonOutline(Canvas canvas) {
-        //第一条和最后一条线需要偏移
-        canvas.drawLine(0, drawOffset, sideLength * 9, drawOffset, outlinePaint);
-        for (int i = 1; i < 3; i++) {
-            canvas.drawLine(0, i * 3 * sideLength, sideLength * 9, i * 3 * sideLength,
-                    outlinePaint);
+        for (int i = 0; i < 4; i++) {
+            canvas.drawLine(overSpace, overSpace + drawOffset + i * outSignle,
+                    resultLength - overSpace, overSpace + drawOffset + i * outSignle, outlinePaint);
         }
-        canvas.drawLine(0, sideLength * 9 - drawOffset, sideLength * 9, sideLength * 9 -
-                drawOffset, outlinePaint);
     }
 
     /**
@@ -186,15 +196,11 @@ public class SudokuView extends View {
      * @param canvas
      */
     private void drawVerticalOutline(Canvas canvas) {
-        //第一条和最后一条线需要偏移
-        canvas.drawLine(drawOffset, drawOffset * 2, drawOffset, sideLength * 9 - drawOffset * 2,
-                outlinePaint);
-        for (int i = 1; i < 3; i++) {
-            canvas.drawLine(i * 3 * sideLength - drawOffset * 2, 0, i * 3 * sideLength,
-                    sideLength * 9 - drawOffset * 2, outlinePaint);
+        for (int i = 0; i < 4; i++) {
+            canvas.drawLine(overSpace + drawOffset + i * outSignle, overSpace + 2 *
+                    drawOffset, overSpace + drawOffset + i * outSignle, resultLength - 2 *
+                    drawOffset - overSpace, outlinePaint);
         }
-        canvas.drawLine(sideLength * 9 - drawOffset, drawOffset * 2, sideLength * 9 - drawOffset,
-                sideLength * 9 - drawOffset * 2, outlinePaint);
     }
 
     /**
@@ -203,10 +209,20 @@ public class SudokuView extends View {
      * @param canvas
      */
     private void drawHorizonInline(Canvas canvas) {
+        float y;
         for (int i = 1; i < 9; i++) {
             if (i % 3 == 0) continue;
-            canvas.drawLine(0, sideLength * i, sideLength * 9, sideLength * i, inlinePaint);
+            if (i < 3) {
+                y = overSpace + 2 * drawOffset + i * sideLength;
+            } else if (3 < i && i < 6) {
+                y = overSpace + outSignle + 2 * drawOffset + sideLength * (i % 4 + 1);
+            } else {
+                y = overSpace + outSignle * 2 + 2 * drawOffset + sideLength * (i % 7 + 1);
+            }
+            canvas.drawLine(overSpace + 2 * drawOffset, y, resultLength - overSpace - 2 *
+                    drawOffset, y, inlinePaint);
         }
+
 
     }
 
@@ -216,9 +232,18 @@ public class SudokuView extends View {
      * @param canvas
      */
     private void drawVerticalInline(Canvas canvas) {
+        float x;
         for (int i = 1; i < 9; i++) {
             if (i % 3 == 0) continue;
-            canvas.drawLine(sideLength * i, 0, sideLength * i, sideLength * 9, inlinePaint);
+            if (i < 3) {
+                x = overSpace + 2 * drawOffset + sideLength * i;
+            } else if (3 < i && i < 6) {
+                x = overSpace + outSignle + drawOffset * 2 + (i % 4 + 1) * sideLength;
+            } else {
+                x = overSpace + outSignle * 2 + drawOffset * 2 + (i % 7 + 1) * sideLength;
+            }
+            canvas.drawLine(x, overSpace + 2 * drawOffset, x, resultLength - 2 * drawOffset -
+                    overSpace, inlinePaint);
         }
     }
 
@@ -231,13 +256,21 @@ public class SudokuView extends View {
      * @param startY 对应方格的上侧y坐标值
      */
     private void drawNumber(Canvas canvas, int number, float startX, float startY) {
+        if (number == 0) return;
         float drawY = startY + sideLength / 2 + (Math.abs(textMetrics.ascent) - textMetrics
                 .descent) / 2;
-
         float drawX = startX + sideLength / 2 - textPaint.measureText(String.valueOf(number)) / 2;
-
         canvas.drawText(String.valueOf(number), drawX, drawY, textPaint);
     }
+
+    private float getXPostion(int x) {
+        return overSpace + x * sideLength + drawOffset * 2 * (x / 3 + 1);
+    }
+
+    private float getYPosition(int y) {
+        return overSpace + y * sideLength + drawOffset * 2 * (y / 3 + 1);
+    }
+
 
     @Override
     public boolean performClick() {
@@ -248,35 +281,28 @@ public class SudokuView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                lastClickTime = System.currentTimeMillis();
                 performClick();
-                selectedPosition[0] = (int) (event.getX() / sideLength);
-                selectedPosition[1] = (int) (event.getY() / sideLength);
-
-                // orign Sudoku position not available
-                if (!isOriginPosition(selectedPosition[0], selectedPosition[1])) {
-                    selected = true;
-                    invalidate();
+                float exactX = event.getX() - overSpace - 2 * drawOffset;
+                float exactY = event.getY() - overSpace - 2 * drawOffset;
+                if (exactX < 0 || exactY < 0) {
+                    Log.d(TAG, "touch position out of bound");
+                    return false;
                 }
+                if (selectedPosition[0] > 8 || selectedPosition[1] > 8) {
+                    Log.d(TAG, "touch position out of bound");
+                    return false;
+                }
+                selectedPosition[0] = (int) (exactX / sideLength);
+                selectedPosition[1] = (int) (exactY / sideLength);
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 if (!isOriginPosition(selectedPosition[0], selectedPosition[1])) {
-                    if (sudoku[selectedPosition[0]][selectedPosition[1]] != 0 && System
-                            .currentTimeMillis() - lastClickTime > 500) {
-                        // long clicked
-                        if (onSetNumberListener != null) {
-                            onSetNumberListener.onReset(selectedPosition[0], selectedPosition[1]);
-                        }
-                    } else {
-                        if (onSetNumberListener != null) {
-                            onSetNumberListener.onSetNumber(selectedPosition[0],
-                                    selectedPosition[1]);
-                        }
+                    if (onSudokuSelectedListener != null) {
+                        onSudokuSelectedListener.onSelected(selectedPosition);
                     }
+                    if (!sameSelectedPosition()) invalidate();
                 }
-                selected = false;
-                invalidate();
                 break;
         }
         return true;
@@ -285,40 +311,84 @@ public class SudokuView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        drawSelectedColor(canvas);
+        drawHighlightLimit(canvas);
         drawSudoku(canvas);
         drawHorizonInline(canvas);
         drawVerticalInline(canvas);
         drawHorizonOutline(canvas);
         drawVerticalOutline(canvas);
+        drawSelectedPosition(canvas);
     }
+
 
     private void drawSudoku(Canvas canvas) {
         for (int i = 0; i < sudoku.length; i++) {
             for (int j = 0; j < sudoku[i].length; j++) {
                 if (sudoku[i][j] > 0) {
                     if (originSudoku[i][j] != 0) {
-                        drawSetColor(canvas, i, j); // only origin Sudoku high light
+//                        drawSetColor(canvas, i, j); // only origin Sudoku high light
+                        textPaint.setColor(numberColor);
+                    } else {
+                        textPaint.setColor(Color.BLACK);
                     }
-                    drawNumber(canvas, sudoku[i][j], i * sideLength, j * sideLength);
+                    drawNumber(canvas, sudoku[i][j], getXPostion(i), getYPosition(j));
                 }
             }
         }
     }
 
-    private void drawSelectedColor(Canvas canvas) {
-        if (!selected) return;
-        drawSetColor(canvas, selectedPosition[0], selectedPosition[1]);
+    private void drawSelectedPosition(Canvas canvas) {
+        if (selectedPosition[0] < 0 || selectedPosition[1] < 0) return;
+        if (originSudoku[selectedPosition[0]][selectedPosition[1]] != 0) return;
+        drawSelectedReact(canvas, selectedPosition[0], selectedPosition[1]);
+        drawNumber(canvas, sudoku[selectedPosition[0]][selectedPosition[1]], getXPostion
+                (selectedPosition[0]), getYPosition(selectedPosition[1]));
+        lastSelectedPosition[0] = selectedPosition[0];
+        lastSelectedPosition[1] = selectedPosition[1];
     }
 
     private void drawSetColor(Canvas canvas, int x, int y) {
-        canvas.drawRect(x * sideLength, y * sideLength, (x + 1) * sideLength, (y + 1) * sideLength,
-                fillPaint);
+        canvas.drawRect(getXPostion(x), getYPosition(y), getXPostion(x) + sideLength,
+                getYPosition(y) + sideLength, fillPaint);
     }
 
+    private void drawSelectedReact(Canvas canvas, int x, int y) {
+        float left = getXPostion(x) - roundR;
+        float top = getYPosition(y) - roundR;
+        float right = getXPostion(x) + sideLength + roundR;
+        float bottom = getYPosition(y) + sideLength + roundR;
+        selectedRect.set(left, top, right, bottom);
+        selectedPaint.setStyle(Paint.Style.FILL);
+        selectedPaint.setColor(Color.WHITE);
+        canvas.drawRoundRect(selectedRect, roundR, roundR, selectedPaint);
 
-    public void setOnSetNumberListener(OnSetNumberListener onSetNumberListener) {
-        this.onSetNumberListener = onSetNumberListener;
+        selectedPaint.setStyle(Paint.Style.STROKE);
+        selectedPaint.setColor(getResources().getColor(R.color.outline_color));
+        selectedPaint.setStrokeWidth(outlineWidth);
+        canvas.drawRoundRect(selectedRect, roundR + 5, roundR + 5, selectedPaint);
+    }
+
+    private void drawHighlightLimit(Canvas canvas) {
+        int x = selectedPosition[0];
+        int y = selectedPosition[1];
+        if (x < 0 || y < 0) return;
+        // 先画当前所在的大方格
+        float startX = overSpace + 2 * drawOffset * (x / 3 + 1) + sideLength * 3 * (x / 3);
+        float startY = overSpace + 2 * drawOffset * (y / 3 + 1) + sideLength * 3 * (y / 3);
+        canvas.drawRect(startX, startY, startX + sideLength * 3, startY + sideLength * 3,
+                fillPaint);
+
+        // 画对应的列
+        startX = overSpace + drawOffset * 2 * (x / 3 + 1) + sideLength * x;
+        startY = overSpace + drawOffset * 2;
+        canvas.drawRect(startX, startY, startX + sideLength, resultLength - overSpace -
+                drawOffset * 2, fillPaint);
+        // 画对应的行
+        startX = overSpace + 2 * drawOffset;
+        startY = overSpace + drawOffset * 2 * (y / 3 + 1) + sideLength * y;
+        canvas.drawRect(startX, startY, resultLength - overSpace - drawOffset * 2, startY +
+                sideLength, fillPaint);
+
     }
 
     /**
@@ -329,6 +399,7 @@ public class SudokuView extends View {
      * @param number
      */
     public void setNumber(int x, int y, int number) {
+        if (originSudoku[x][y] != 0) return;
         sudoku[x][y] = number;
         SFHelper.getInstance().putSudoku(Constant.LAST_GAME_HISTORY, sudoku);
         invalidate();
@@ -369,5 +440,14 @@ public class SudokuView extends View {
 
     private boolean isOriginPosition(int x, int y) {
         return originSudoku[x][y] != 0;
+    }
+
+    public void setOnSudokuSelectedListener(OnSudokuSelectedListener onSudokuSelectedListener) {
+        this.onSudokuSelectedListener = onSudokuSelectedListener;
+    }
+
+    private boolean sameSelectedPosition() {
+        return lastSelectedPosition[0] == selectedPosition[0] && lastSelectedPosition[1] ==
+                selectedPosition[1] && selectedPosition[0] > 0;
     }
 }

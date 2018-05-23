@@ -3,21 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:background="@color/white"
     android:padding="0dp">
 
     <sudo.hdz.com.sudoku.widget.SudokuView
         android:id="@+id/sudoku_view"
         android:layout_width="350dp"
         android:layout_height="600dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="50dp"
         android:clickable="true"
         android:focusable="true"
         app:fill_color="@color/fill_color"
         app:inline_color="@color/inline_color"
         app:inline_width="1px"
-        app:number_color="@color/black"
+        app:number_color="@color/origin_number_color"
         app:number_size="@dimen/number_size"
         app:outline_color="@color/outline_color"
         app:outline_width="2dp" />
+
+    <sudo.hdz.com.sudoku.widget.ToolView
+        android:id="@+id/tool_view"
+        android:layout_width="320dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/sudoku_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="2dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:number_color="@color/black"
+        app:number_size="30sp"
+        app:fill_color="@color/fill_color"
+        />
 
 </RelativeLayout>
