@@ -180,6 +180,7 @@ public class ToolView extends View implements PossibleNumberWatcher {
     }
 
     private boolean isUnableArea(int x, int y) {
+        if (x == 4 && y == 1) return false; // zero always enable
         if (possibleNumber.isEmpty()) return false;
         for (int item : possibleNumber) {
             int[] pos = getPositionByNumber(item);

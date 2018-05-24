@@ -431,6 +431,8 @@ public class SudokuView extends View implements PossibleNumber {
         }
         sudoku[x][y] = number;
         SFHelper.getInstance().putSudoku(Constant.LAST_GAME_HISTORY, sudoku);
+        notifyToolView(SudokuUtils.getInstance().getPossibleNUmber
+                (selectedPosition[0], selectedPosition[1], sudoku));
         invalidate();
     }
 
