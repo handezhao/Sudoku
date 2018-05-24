@@ -11,15 +11,18 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.Set;
+
 import sudo.hdz.com.sudoku.R;
 import sudo.hdz.com.sudoku.callback.OnNumberPickListener;
+import sudo.hdz.com.sudoku.observer.PossibleNumberWatcher;
 
 /**
  * Description:
  * Created by hdz on 22/05/2018.
  */
 
-public class ToolView extends View {
+public class ToolView extends View implements PossibleNumberWatcher{
 
     public static final String TAG = "ToolView";
 
@@ -141,5 +144,10 @@ public class ToolView extends View {
 
     public void setOnNumberPickListener(OnNumberPickListener onNumberPickListener) {
         this.onNumberPickListener = onNumberPickListener;
+    }
+
+    @Override
+    public void onPossibleNumberChanged(Set<Integer> possibleNumber) {
+        Log.d(TAG, "onPossibleNumberChanged " + possibleNumber);
     }
 }

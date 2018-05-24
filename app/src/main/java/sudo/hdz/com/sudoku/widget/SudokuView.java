@@ -12,10 +12,17 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import sudo.hdz.com.sudoku.R;
 import sudo.hdz.com.sudoku.callback.OnSudokuSelectedListener;
+import sudo.hdz.com.sudoku.observer.PossibleNumber;
+import sudo.hdz.com.sudoku.observer.PossibleNumberWatcher;
 import sudo.hdz.com.sudoku.utils.Constant;
 import sudo.hdz.com.sudoku.utils.SFHelper;
+import sudo.hdz.com.sudoku.utils.SudokuUtils;
 
 /**
  * Description: a Sudoku demo
@@ -25,7 +32,7 @@ import sudo.hdz.com.sudoku.utils.SFHelper;
  * Created by hdz on 17/05/2018.
  */
 
-public class SudokuView extends View {
+public class SudokuView extends View implements PossibleNumber {
 
     public static final String TAG = "SudokuView";
 
@@ -102,6 +109,8 @@ public class SudokuView extends View {
     private float outSignle;
     int resultLength;
     RectF selectedRect = new RectF(0, 0, 0, 0);
+
+    private List<PossibleNumberWatcher> possibleNumberWatchers = new ArrayList<>();
 
 
     public SudokuView(Context context) {
@@ -301,7 +310,10 @@ public class SudokuView extends View {
                     if (onSudokuSelectedListener != null) {
                         onSudokuSelectedListener.onSelected(selectedPosition);
                     }
-                    if (!sameSelectedPosition()) invalidate();
+                    if (!sameSelectedPosition()) {
+                        notifyToolView(SudokuUtils.getInstance().getPossibleNUmber(selectedPosition[0],selectedPosition[1],sudoku));
+                        invalidate();
+                    }
                 }
                 break;
         }
@@ -402,6 +414,11 @@ public class SudokuView extends View {
      */
     public void setNumber(int x, int y, int number) {
         if (originSudoku[x][y] != 0) return;
+        //check valid
+        if (!SudokuUtils.getInstance().isValidNumber(number, x, y, sudoku)) {
+            Log.d(TAG, "invalid number!");
+            return;
+        }
         sudoku[x][y] = number;
         SFHelper.getInstance().putSudoku(Constant.LAST_GAME_HISTORY, sudoku);
         invalidate();
@@ -456,5 +473,26 @@ public class SudokuView extends View {
     private boolean sameSelectedPosition() {
         return lastSelectedPosition[0] == selectedPosition[0] && lastSelectedPosition[1] ==
                 selectedPosition[1] && selectedPosition[0] > 0;
+    }
+
+    @Override
+    public void notifyToolView(Set<Integer> possible) {
+        for(PossibleNumberWatcher watcher : possibleNumberWatchers) {
+            watcher.onPossibleNumberChanged(possible);
+        }
+    }
+
+    @Override
+    public void registerPossibleNumberListener(PossibleNumberWatcher watcher) {
+        if (!possibleNumberWatchers.contains(watcher)) {
+            possibleNumberWatchers.add(watcher);
+        }
+    }
+
+    @Override
+    public void unRegisterPossibleNumberListener(PossibleNumberWatcher watcher) {
+        if (possibleNumberWatchers.contains(watcher)) {
+            possibleNumberWatchers.remove(watcher);
+        }
     }
 }

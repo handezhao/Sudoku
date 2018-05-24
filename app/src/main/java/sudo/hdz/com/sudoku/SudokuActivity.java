@@ -31,7 +31,7 @@ public class SudokuActivity extends AppCompatActivity implements OnSudokuSelecte
         sudokuView.setOnSudokuSelectedListener(this);
         toolView = findViewById(R.id.tool_view);
         toolView.setOnNumberPickListener(this);
-
+        sudokuView.registerPossibleNumberListener(toolView);
         sudoku = new int[][]{
                 {2, 3, 0, 0, 0, 0, 1, 0, 0},
                 {1, 8, 0, 0, 2, 4, 0, 9, 0},
@@ -67,5 +67,11 @@ public class SudokuActivity extends AppCompatActivity implements OnSudokuSelecte
     public void onNumberPick(int number) {
         Log.d(TAG, "pick number is " + number);
         sudokuView.setNumber(selectedPosition[0], selectedPosition[1], number);
+    }
+
+    @Override
+    protected void onDestroy() {
+        sudokuView.unRegisterPossibleNumberListener(toolView);
+        super.onDestroy();
     }
 }
