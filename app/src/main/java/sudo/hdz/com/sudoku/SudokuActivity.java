@@ -60,7 +60,9 @@ public class SudokuActivity extends AppCompatActivity implements OnSudokuSelecte
 
     @Override
     public void onSelected(int[] position) {
-        selectedPosition = position;
+//        selectedPosition = position;
+        selectedPosition[0] = position[0];
+        selectedPosition[1] = position[1];
     }
 
     @Override

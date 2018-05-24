@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="sudo.hdz.com.sudoku">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -19,7 +22,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SudokuActivity"/>
+        <activity android:name=".SudokuActivity" />
 
     </application>
 

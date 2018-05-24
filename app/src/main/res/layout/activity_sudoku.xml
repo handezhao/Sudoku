@@ -33,7 +33,7 @@
         android:focusable="true"
         app:number_color="@color/black"
         app:number_size="30sp"
-        app:fill_color="@color/fill_color"
+        app:fill_color="@color/tool_fill_color"
         />
 
 </RelativeLayout>

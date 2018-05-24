@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import sudo.hdz.com.sudoku.R;
@@ -22,7 +24,7 @@ import sudo.hdz.com.sudoku.observer.PossibleNumberWatcher;
  * Created by hdz on 22/05/2018.
  */
 
-public class ToolView extends View implements PossibleNumberWatcher{
+public class ToolView extends View implements PossibleNumberWatcher {
 
     public static final String TAG = "ToolView";
 
@@ -50,6 +52,10 @@ public class ToolView extends View implements PossibleNumberWatcher{
             {5, 0}
     };
 
+    private Set<Integer> possibleNumber = new HashSet<>();
+    private static final float INSETX = 10.0f;
+    private static final float INSETY = 2.0f;
+
     public ToolView(Context context) {
         this(context, null, 0);
     }
@@ -75,7 +81,6 @@ public class ToolView extends View implements PossibleNumberWatcher{
         textMetrics = textPaint.getFontMetrics();
 
         fillPaint = new Paint();
-        fillPaint.setColor(fillColor);
         fillPaint.setAntiAlias(true);
         fillPaint.setStyle(Paint.Style.FILL);
     }
@@ -86,7 +91,6 @@ public class ToolView extends View implements PossibleNumberWatcher{
         int width = MeasureSpec.getSize(widthMeasureSpec) - getPaddingLeft() - getPaddingRight();
         int height = MeasureSpec.getSize(heightMeasureSpec) - getPaddingTop() - getPaddingBottom();
 
-        Log.d(TAG, "width is " + width + ", height is " + height);
         singleWidth = width / 5.0f;
         singleHeight = height / 2.0f;
     }
@@ -95,6 +99,7 @@ public class ToolView extends View implements PossibleNumberWatcher{
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         drawPressRect(canvas, select[0], select[1]);
+        drawPossibleArea(canvas);
         drawOptions(canvas);
     }
 
@@ -117,8 +122,25 @@ public class ToolView extends View implements PossibleNumberWatcher{
     private void drawPressRect(Canvas canvas, int x, int y) {
         if (!selected) return;
         if (x < 0 || y < 0 || x > 4 || y > 1) return;
-        canvas.drawRoundRect(x * singleWidth, y * singleHeight, (x + 1) * singleWidth, (y + 1) *
-                singleHeight, 20.0f, 20.0f, fillPaint);
+        fillPaint.setColor(fillColor);
+        canvas.drawRoundRect(x * singleWidth + INSETX, y * singleHeight + INSETY, (x + 1) *
+                singleWidth - INSETX, (y + 1) * singleHeight - INSETY, 20.0f, 20.0f, fillPaint);
+    }
+
+    private void drawPossibleArea(Canvas canvas) {
+        if (possibleNumber.isEmpty()) return;
+        for (int item : possibleNumber) {
+            drawPossibleReact(canvas, getPositionByNumber(item)[0], getPositionByNumber(item)[1]);
+        }
+    }
+
+    @TargetApi(21)
+    private void drawPossibleReact(Canvas canvas, int x, int y) {
+        if (selected) return;
+        if (x < 0 || y < 0 || x > 4 || y > 1) return;
+        fillPaint.setColor(Color.parseColor("#97de95"));
+        canvas.drawRoundRect(x * singleWidth + INSETX, y * singleHeight + INSETY, (x + 1) *
+                singleWidth - INSETX, (y + 1) * singleHeight - INSETY, 20.0f, 20.0f, fillPaint);
     }
 
     @Override
@@ -127,6 +149,10 @@ public class ToolView extends View implements PossibleNumberWatcher{
             case MotionEvent.ACTION_DOWN:
                 select[0] = (int) ((event.getX() - getPaddingLeft()) / singleWidth);
                 select[1] = (int) ((event.getY() - getPaddingTop()) / singleHeight);
+                if (isUnableArea(select[0], select[1])) {
+                    Log.d(TAG, "unable area");
+                    return false;
+                }
                 selected = true;
                 invalidate();
                 break;
@@ -149,5 +175,33 @@ public class ToolView extends View implements PossibleNumberWatcher{
     @Override
     public void onPossibleNumberChanged(Set<Integer> possibleNumber) {
         Log.d(TAG, "onPossibleNumberChanged " + possibleNumber);
+        this.possibleNumber = possibleNumber;
+        invalidate();
+    }
+
+    private boolean isUnableArea(int x, int y) {
+        if (possibleNumber.isEmpty()) return false;
+        for (int item : possibleNumber) {
+            int[] pos = getPositionByNumber(item);
+            if (pos[0] == x && pos[1] == y) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private int[] getPositionByNumber(int number) {
+        int[] pos = new int[2];
+        if (number == 0) {
+            pos[0] = 4;
+            pos[1] = 1;
+        } else if (number < 6) {
+            pos[0] = number - 1;
+            pos[1] = number / 6;
+        } else {
+            pos[0] = number - 6;
+            pos[1] = number / 6;
+        }
+        return pos;
     }
 }

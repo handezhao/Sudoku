@@ -293,25 +293,30 @@ public class SudokuView extends View implements PossibleNumber {
                 performClick();
                 float exactX = event.getX() - overSpace - 2 * drawOffset;
                 float exactY = event.getY() - overSpace - 2 * drawOffset;
-                if (exactX < 0 || exactY < 0) {
-                    Log.d(TAG, "touch position out of bound");
+                if (isOutBound(event.getX(), event.getY())) {
+                    Log.w(TAG, " isOutBound !!!");
                     return false;
                 }
                 selectedPosition[0] = (int) (exactX / sideLength);
                 selectedPosition[1] = (int) (exactY / sideLength);
-                if (selectedPosition[0] > 8 || selectedPosition[1] > 8) {
-                    Log.d(TAG, "touch position out of bound");
-                    return false;
+                // 边角处理
+                if (selectedPosition[0] > 8) {
+                    selectedPosition[0] = 8;
+                }
+                if (selectedPosition[1] > 8) {
+                    selectedPosition[1] = 8;
                 }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
+                if (!isInBound(selectedPosition[0], selectedPosition[1])) return false;
                 if (!isOriginPosition(selectedPosition[0], selectedPosition[1])) {
                     if (onSudokuSelectedListener != null) {
                         onSudokuSelectedListener.onSelected(selectedPosition);
                     }
                     if (!sameSelectedPosition()) {
-                        notifyToolView(SudokuUtils.getInstance().getPossibleNUmber(selectedPosition[0],selectedPosition[1],sudoku));
+                        notifyToolView(SudokuUtils.getInstance().getPossibleNUmber
+                                (selectedPosition[0], selectedPosition[1], sudoku));
                         invalidate();
                     }
                 }
@@ -351,7 +356,7 @@ public class SudokuView extends View implements PossibleNumber {
     }
 
     private void drawSelectedPosition(Canvas canvas) {
-        if (selectedPosition[0] < 0 || selectedPosition[1] < 0) return;
+        if (!isInBound(selectedPosition[0], selectedPosition[1])) return;
         if (originSudoku[selectedPosition[0]][selectedPosition[1]] != 0) return;
         drawSelectedReact(canvas, selectedPosition[0], selectedPosition[1]);
         textPaint.setColor(Color.BLACK);
@@ -413,6 +418,11 @@ public class SudokuView extends View implements PossibleNumber {
      * @param number
      */
     public void setNumber(int x, int y, int number) {
+        if (!isInBound(x, y)) {
+            Log.e(TAG, "x is " + x + ", y is " + y);
+            Log.e(TAG, "unexpect x or y ");
+            return;
+        }
         if (originSudoku[x][y] != 0) return;
         //check valid
         if (!SudokuUtils.getInstance().isValidNumber(number, x, y, sudoku)) {
@@ -458,7 +468,7 @@ public class SudokuView extends View implements PossibleNumber {
     }
 
     private boolean isOriginPosition(int x, int y) {
-        if (x < 0 || y < 0 || x > 8 || y > 8) {
+        if (!isInBound(x, y)) {
             Log.d(TAG, "touch outside");
             return false;
         } else {
@@ -475,9 +485,18 @@ public class SudokuView extends View implements PossibleNumber {
                 selectedPosition[1] && selectedPosition[0] > 0;
     }
 
+    private boolean isInBound(int x, int y) {
+        return x >= 0 && x < 9 && y >= 0 && y < 9;
+    }
+
+    private boolean isOutBound(float x, float y) {
+        return x <= (overSpace + drawOffset * 2) || x >= (resultLength - overSpace) || y <=
+                (overSpace + drawOffset * 2) || y >= (resultLength - overSpace);
+    }
+
     @Override
     public void notifyToolView(Set<Integer> possible) {
-        for(PossibleNumberWatcher watcher : possibleNumberWatchers) {
+        for (PossibleNumberWatcher watcher : possibleNumberWatchers) {
             watcher.onPossibleNumberChanged(possible);
         }
     }
