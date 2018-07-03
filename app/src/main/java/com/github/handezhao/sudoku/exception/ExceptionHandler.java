@@ -1,4 +1,4 @@
-package sudo.hdz.com.sudoku.exception;
+package com.github.handezhao.sudoku.exception;
 
 import android.util.Log;
 

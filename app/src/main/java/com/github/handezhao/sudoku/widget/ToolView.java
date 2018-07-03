@@ -1,4 +1,4 @@
-package sudo.hdz.com.sudoku.widget;
+package com.github.handezhao.sudoku.widget;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -16,8 +16,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import sudo.hdz.com.sudoku.R;
-import sudo.hdz.com.sudoku.callback.OnNumberPickListener;
-import sudo.hdz.com.sudoku.observer.PossibleNumberWatcher;
+import com.github.handezhao.sudoku.callback.OnNumberPickListener;
+import com.github.handezhao.sudoku.observer.PossibleNumberWatcher;
 
 /**
  * Description:

@@ -1,13 +1,15 @@
-package sudo.hdz.com.sudoku;
+package com.github.handezhao.sudoku;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import sudo.hdz.com.sudoku.callback.OnNumberPickListener;
-import sudo.hdz.com.sudoku.callback.PickNumberCallback;
-import sudo.hdz.com.sudoku.widget.NumberPicker;
+import com.github.handezhao.sudoku.callback.OnNumberPickListener;
+import com.github.handezhao.sudoku.callback.PickNumberCallback;
+import com.github.handezhao.sudoku.widget.NumberPicker;
+
+import sudo.hdz.com.sudoku.R;
 
 /**
  * Description:

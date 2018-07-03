@@ -1,4 +1,4 @@
-package sudo.hdz.com.sudoku.observer;
+package com.github.handezhao.sudoku.observer;
 
 import java.util.Set;
 

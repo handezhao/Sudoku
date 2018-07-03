@@ -1,16 +1,18 @@
-package sudo.hdz.com.sudoku;
+package com.github.handezhao.sudoku;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import sudo.hdz.com.sudoku.callback.OnNumberPickListener;
-import sudo.hdz.com.sudoku.callback.OnSudokuSelectedListener;
-import sudo.hdz.com.sudoku.utils.Constant;
-import sudo.hdz.com.sudoku.utils.SFHelper;
-import sudo.hdz.com.sudoku.widget.SudokuView;
-import sudo.hdz.com.sudoku.widget.ToolView;
+import com.github.handezhao.sudoku.callback.OnNumberPickListener;
+import com.github.handezhao.sudoku.callback.OnSudokuSelectedListener;
+import com.github.handezhao.sudoku.utils.Constant;
+import com.github.handezhao.sudoku.utils.SFHelper;
+import com.github.handezhao.sudoku.widget.SudokuView;
+import com.github.handezhao.sudoku.widget.ToolView;
+
+import sudo.hdz.com.sudoku.R;
 
 public class SudokuActivity extends AppCompatActivity implements OnSudokuSelectedListener,
         OnNumberPickListener {

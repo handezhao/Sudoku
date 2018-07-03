@@ -1,4 +1,4 @@
-package sudo.hdz.com.sudoku.utils;
+package com.github.handezhao.sudoku.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 
-import sudo.hdz.com.sudoku.App;
+import com.github.handezhao.sudoku.App;
 
 /**
  * Description:

@@ -1,4 +1,4 @@
-package sudo.hdz.com.sudoku.widget;
+package com.github.handezhao.sudoku.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -11,7 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import sudo.hdz.com.sudoku.R;
-import sudo.hdz.com.sudoku.callback.OnNumberPickListener;
+import com.github.handezhao.sudoku.callback.OnNumberPickListener;
 
 /**
  * Description:

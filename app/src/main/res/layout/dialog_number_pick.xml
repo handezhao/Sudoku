@@ -6,7 +6,7 @@
     android:background="@color/white"
     android:gravity="center">
 
-    <sudo.hdz.com.sudoku.widget.NumberPicker
+    <com.github.handezhao.sudoku.widget.NumberPicker
         android:id="@+id/picker"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

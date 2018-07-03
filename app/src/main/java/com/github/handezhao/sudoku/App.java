@@ -1,12 +1,12 @@
-package sudo.hdz.com.sudoku;
+package com.github.handezhao.sudoku;
 
 import android.app.Application;
 
 import java.io.File;
 
-import sudo.hdz.com.sudoku.exception.ExceptionHandler;
-import sudo.hdz.com.sudoku.utils.Constant;
-import sudo.hdz.com.sudoku.utils.SFHelper;
+import com.github.handezhao.sudoku.exception.ExceptionHandler;
+import com.github.handezhao.sudoku.utils.Constant;
+import com.github.handezhao.sudoku.utils.SFHelper;
 
 /**
  * Description:

@@ -1,4 +1,4 @@
-package sudo.hdz.com.sudoku.callback;
+package com.github.handezhao.sudoku.callback;
 
 /**
  * Description:

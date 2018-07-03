@@ -1,4 +1,4 @@
-package sudo.hdz.com.sudoku;
+package com.github.handezhao.sudoku;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import sudo.hdz.com.sudoku.R;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 

@@ -1,4 +1,4 @@
-package sudo.hdz.com.sudoku.utils;
+package com.github.handezhao.sudoku.utils;
 
 import android.util.Log;
 

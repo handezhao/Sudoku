@@ -1,4 +1,4 @@
-package sudo.hdz.com.sudoku.widget;
+package com.github.handezhao.sudoku.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.Set;
 
 import sudo.hdz.com.sudoku.R;
-import sudo.hdz.com.sudoku.callback.OnSudokuSelectedListener;
-import sudo.hdz.com.sudoku.observer.PossibleNumber;
-import sudo.hdz.com.sudoku.observer.PossibleNumberWatcher;
-import sudo.hdz.com.sudoku.utils.Constant;
-import sudo.hdz.com.sudoku.utils.SFHelper;
-import sudo.hdz.com.sudoku.utils.SudokuUtils;
+import com.github.handezhao.sudoku.callback.OnSudokuSelectedListener;
+import com.github.handezhao.sudoku.observer.PossibleNumber;
+import com.github.handezhao.sudoku.observer.PossibleNumberWatcher;
+import com.github.handezhao.sudoku.utils.Constant;
+import com.github.handezhao.sudoku.utils.SFHelper;
+import com.github.handezhao.sudoku.utils.SudokuUtils;
 
 /**
  * Description: a Sudoku demo
