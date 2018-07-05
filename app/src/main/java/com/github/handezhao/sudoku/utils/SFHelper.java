@@ -4,9 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import com.github.handezhao.sudoku.SudokuApp;
 import com.google.gson.Gson;
-
-import com.github.handezhao.sudoku.App;
 
 /**
  * Description:
@@ -14,16 +13,18 @@ import com.github.handezhao.sudoku.App;
  */
 
 public class SFHelper {
+    private SharedPreferences.Editor editor;
+    private SharedPreferences sp;
 
     private SFHelper() {
     }
 
-    private SharedPreferences.Editor editor;
-    private SharedPreferences sp;
-
+    public static SFHelper getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
 
     public void initSharedPreference() {
-        sp = App.app.getSharedPreferences("sudoku", Context.MODE_PRIVATE);
+        sp = SudokuApp.sudokuApp.getSharedPreferences("sudoku", Context.MODE_PRIVATE);
         editor = sp.edit();
     }
 
@@ -52,11 +53,6 @@ public class SFHelper {
 
         Gson gson = new Gson();
         return gson.fromJson(target, int[][].class);
-    }
-
-
-    public static SFHelper getInstance() {
-        return SingletonHolder.INSTANCE;
     }
 
     private static class SingletonHolder {

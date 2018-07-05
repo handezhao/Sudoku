@@ -12,9 +12,13 @@ import java.util.Set;
 
 public class SudokuUtils {
 
-    public static final String TAG = "SudokuUtils-SudokuView";
+    private static final String TAG = "SudokuUtils-SudokuView";
 
     private SudokuUtils() {
+    }
+
+    public static SudokuUtils getInstance() {
+        return SingletonHolder.INSTANCE;
     }
 
     /**
@@ -42,7 +46,7 @@ public class SudokuUtils {
         }
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                if (sudoku[x / 3 * 3 + i][y / 3 * 3 + j] != 0 ) {
+                if (sudoku[x / 3 * 3 + i][y / 3 * 3 + j] != 0) {
                     squal.add(sudoku[x / 3 * 3 + i][y / 3 * 3 + j]);
                 }
             }
@@ -50,9 +54,9 @@ public class SudokuUtils {
         return !colume.contains(number) && !row.contains(number) && !squal.contains(number);
     }
 
-
     /**
      * get possible numbers of selected position
+     *
      * @param x
      * @param y
      * @param sudoku
@@ -73,7 +77,7 @@ public class SudokuUtils {
         }
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                if (sudoku[x / 3 * 3 + i][y / 3 * 3 + j] != 0 ) {
+                if (sudoku[x / 3 * 3 + i][y / 3 * 3 + j] != 0) {
                     squal.add(sudoku[x / 3 * 3 + i][y / 3 * 3 + j]);
                 }
             }
@@ -86,11 +90,6 @@ public class SudokuUtils {
             }
         }
         return set;
-    }
-
-
-    public static SudokuUtils getInstance() {
-        return SingletonHolder.INSTANCE;
     }
 
     private static class SingletonHolder {

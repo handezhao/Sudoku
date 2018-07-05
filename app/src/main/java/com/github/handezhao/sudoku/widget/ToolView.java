@@ -6,18 +6,19 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.github.handezhao.sudoku.R;
+import com.github.handezhao.sudoku.callback.OnNumberPickListener;
+import com.github.handezhao.sudoku.observer.PossibleNumberWatcher;
+
 import java.util.HashSet;
 import java.util.Set;
 
-import sudo.hdz.com.sudoku.R;
-import com.github.handezhao.sudoku.callback.OnNumberPickListener;
-import com.github.handezhao.sudoku.observer.PossibleNumberWatcher;
+import androidx.annotation.Nullable;
 
 /**
  * Description:
@@ -27,22 +28,18 @@ import com.github.handezhao.sudoku.observer.PossibleNumberWatcher;
 public class ToolView extends View implements PossibleNumberWatcher {
 
     public static final String TAG = "ToolView";
-
+    private static final float INSETX = 10.0f;
+    private static final float INSETY = 2.0f;
     private float singleHeight;
     private float singleWidth;
-
     private Paint textPaint;
     private Paint.FontMetrics textMetrics;
-
     private float numberSize;
     private int numberColor;
     private int fillColor;
-
     private Paint fillPaint;
-
     private OnNumberPickListener onNumberPickListener;
     private boolean selected = false;
-
     private int[] select = new int[2];
     private int[][] options = new int[][]{
             {1, 6},
@@ -51,10 +48,7 @@ public class ToolView extends View implements PossibleNumberWatcher {
             {4, 9},
             {5, 0}
     };
-
     private Set<Integer> possibleNumber = new HashSet<>();
-    private static final float INSETX = 10.0f;
-    private static final float INSETY = 2.0f;
 
     public ToolView(Context context) {
         this(context, null, 0);

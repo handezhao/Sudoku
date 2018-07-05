@@ -3,13 +3,12 @@ package com.github.handezhao.sudoku;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 
 import com.github.handezhao.sudoku.callback.OnNumberPickListener;
 import com.github.handezhao.sudoku.callback.PickNumberCallback;
 import com.github.handezhao.sudoku.widget.NumberPicker;
 
-import sudo.hdz.com.sudoku.R;
+import androidx.annotation.NonNull;
 
 /**
  * Description:

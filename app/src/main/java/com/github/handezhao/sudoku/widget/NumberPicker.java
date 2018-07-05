@@ -4,14 +4,15 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import sudo.hdz.com.sudoku.R;
+import com.github.handezhao.sudoku.R;
 import com.github.handezhao.sudoku.callback.OnNumberPickListener;
+
+import androidx.annotation.Nullable;
 
 /**
  * Description:

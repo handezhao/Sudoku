@@ -1,14 +1,20 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.jakewharton.butterknife'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.github.handezhao.sudoku"
         minSdkVersion 19
-        targetSdkVersion 27
+        targetSdkVersion 28
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
+        externalNativeBuild {
+            cmake {
+                cppFlags "-frtti", "-fexceptions", "-std=c++11"
+                abiFilters 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+            }
+        }
     }
     buildTypes {
         release {
@@ -16,13 +22,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+        }
+    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    implementation 'com.jakewharton:butterknife:9.0.0-SNAPSHOT'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-SNAPSHOT'
+    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
+    implementation 'androidx.multidex:multidex:2.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
     implementation 'com.google.code.gson:gson:2.8.5'
 }

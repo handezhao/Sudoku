@@ -6,23 +6,24 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import sudo.hdz.com.sudoku.R;
+import com.github.handezhao.sudoku.R;
 import com.github.handezhao.sudoku.callback.OnSudokuSelectedListener;
 import com.github.handezhao.sudoku.observer.PossibleNumber;
 import com.github.handezhao.sudoku.observer.PossibleNumberWatcher;
 import com.github.handezhao.sudoku.utils.Constant;
 import com.github.handezhao.sudoku.utils.SFHelper;
 import com.github.handezhao.sudoku.utils.SudokuUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import androidx.annotation.Nullable;
 
 /**
  * Description: a Sudoku demo
@@ -35,81 +36,61 @@ import com.github.handezhao.sudoku.utils.SudokuUtils;
 public class SudokuView extends View implements PossibleNumber {
 
     public static final String TAG = "SudokuView";
-
+    private static final float overSpace = 50.0f;
+    int resultLength;
+    RectF selectedRect = new RectF(0, 0, 0, 0);
     /**
      * 外边框的宽度
      */
     private float outlineWidth = 0;
-
     /**
      * 外边框线的颜色
      */
     private int outlineColor = 0x000;
-
     /**
      * 内框线的颜色
      */
     private int inlineColor = 0x000;
-
     /**
      * 内框的宽度
      */
     private float inlineWidth = 0;
-
     /**
      * 小方格的边长
      */
     private float sideLength;
-
     private int fillColor = 0xD7FBE8;
-
     private float numberSize = 60.0f;
     private int numberColor = 0x000;
-
-
     private Paint outlinePaint;
     private Paint inlinePaint;
     private Paint textPaint;
     private Paint fillPaint;
     private Paint selectedPaint;
-
     /**
      * 防止四条边框只显示一半，需要draw line的时候偏移的量
      */
     private float drawOffset = 0f;
-
     /**
      * 写数字的时候为了写在正中央时引入的FontMetrics
      */
     private Paint.FontMetrics textMetrics;
-
     /**
      * 当前选择的格子
      */
     private int[] selectedPosition = new int[]{-1, -1};
-
     private int[] lastSelectedPosition = new int[]{-1, -1};
-
     private OnSudokuSelectedListener onSudokuSelectedListener;
-
     /**
      * 当前展示的数独
      */
     private int[][] sudoku = new int[9][9];
-
     /**
      * 原题对应的数独
      */
     private int[][] originSudoku = new int[9][9];
-
     private float roundR = 16.0f;
-
-    private static final float overSpace = 50.0f;
-
     private float outSignle;
-    int resultLength;
-    RectF selectedRect = new RectF(0, 0, 0, 0);
-
     private List<PossibleNumberWatcher> possibleNumberWatchers = new ArrayList<>();
 
 

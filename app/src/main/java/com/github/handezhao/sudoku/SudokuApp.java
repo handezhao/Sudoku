@@ -1,26 +1,26 @@
 package com.github.handezhao.sudoku;
 
-import android.app.Application;
-
-import java.io.File;
-
 import com.github.handezhao.sudoku.exception.ExceptionHandler;
 import com.github.handezhao.sudoku.utils.Constant;
 import com.github.handezhao.sudoku.utils.SFHelper;
+
+import java.io.File;
+
+import androidx.multidex.MultiDexApplication;
 
 /**
  * Description:
  * Created by hdz on 18/05/2018.
  */
 
-public class App extends Application {
+public class SudokuApp extends MultiDexApplication {
 
-    public static App app;
+    public static SudokuApp sudokuApp;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        app = this;
+        sudokuApp = this;
         init();
     }
 
